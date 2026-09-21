@@ -1,0 +1,55 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="card">
+  <h1>{{ title }}</h1>
+  {% if live_link %}
+  <p class="live-link-row">
+    🔴 <a href="{{ live_link }}" target="_blank" rel="noopener">View {{ symbol }} LIVE on Yahoo Finance</a>
+  </p>
+  {% endif %}
+
+  <div class="downloads">
+    <a class="btn-secondary" href="{{ url_for('download_report', fmt='pdf') }}">{{ t(lang,'download_pdf') }}</a>
+    <a class="btn-secondary" href="{{ url_for('download_report', fmt='docx') }}">{{ t(lang,'download_docx') }}</a>
+    <a class="btn-secondary" href="{{ url_for('download_report', fmt='csv') }}">{{ t(lang,'download_csv') }}</a>
+    <a class="btn-secondary" href="{{ url_for('download_report', fmt='txt') }}">{{ t(lang,'download_txt') }}</a>
+  </div>
+  <p class="hint">All chart views below are also embedded as images in the PDF and DOCX downloads.</p>
+
+  {% if charts_b64 %}
+  <section class="report-section">
+    <h2>{{ t(lang, 'chart_section_title') }}</h2>
+    <label>{{ t(lang, 'chart_select_label') }}</label>
+    <select id="chart-select">
+      {% for label in charts_b64.keys() %}
+      <option value="{{ loop.index0 }}">{{ label }}</option>
+      {% endfor %}
+    </select>
+    <div class="chart-view">
+      {% for label, b64 in charts_b64.items() %}
+      <img class="chart-img" data-idx="{{ loop.index0 }}" style="{% if not loop.first %}display:none;{% endif %}"
+           src="data:image/png;base64,{{ b64 }}" alt="{{ label }}">
+      {% endfor %}
+    </div>
+  </section>
+  {% endif %}
+
+  {% for heading, bullets in points %}
+    <section class="report-section">
+      <h2>{{ heading }}</h2>
+      <ul>
+        {% for b in bullets %}<li>{{ b }}</li>{% endfor %}
+      </ul>
+    </section>
+  {% endfor %}
+
+  {% if chart_trace %}
+  <section class="report-section">
+    <h2>Uploaded Chart Photo — Traced Preview (approximate)</h2>
+    <p>{{ chart_trace }}</p>
+  </section>
+  {% endif %}
+</div>
+
+<script src="{{ url_for('static', filename='js/main.js') }}"></script>
+{% endblock %}

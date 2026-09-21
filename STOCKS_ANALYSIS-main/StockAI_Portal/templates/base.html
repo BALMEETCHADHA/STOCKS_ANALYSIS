@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="{{ lang }}">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>{{ t(lang, 'app_name') }}</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+  <script>
+    // Apply saved theme before paint to avoid a flash of the wrong theme.
+    // Default is DARK unless the user has explicitly switched to light before.
+    (function () {
+      var saved = localStorage.getItem('stockai-theme');
+      if (saved === 'light') { document.documentElement.setAttribute('data-theme', 'light'); }
+    })();
+  </script>
+</head>
+<body>
+  <header class="topbar">
+    <div class="brand">📈 {{ t(lang, 'app_name') }}</div>
+    <nav>
+      <a href="{{ url_for('onboarding') }}">{{ t(lang, 'nav_home') }}</a>
+      <a href="{{ url_for('dashboard') }}">{{ t(lang, 'nav_dashboard') }}</a>
+      <a href="{{ url_for('daily') }}">{{ t(lang, 'nav_daily') }}</a>
+      <a href="{{ url_for('report_view') }}">{{ t(lang, 'nav_report') }}</a>
+    </nav>
+    {% if profile %}<div class="user-pill">👤 {{ profile.name }}</div>{% endif %}
+    <button type="button" id="theme-toggle" class="theme-toggle" title="Toggle light/dark" aria-label="Toggle light/dark theme">🌙</button>
+  </header>
+
+  <main class="container">
+    {% with messages = get_flashed_messages() %}
+      {% if messages %}
+        <div class="flash">
+          {% for m in messages %}<p>{{ m }}</p>{% endfor %}
+        </div>
+      {% endif %}
+    {% endwith %}
+    {% block content %}{% endblock %}
+  </main>
+
+  <footer>
+    <p>StockAI Portal · Educational AI analysis, not financial advice.</p>
+  </footer>
+
+  <script>
+    document.addEventListener("DOMContentLoaded", function () {
+      var btn = document.getElementById("theme-toggle");
+      var root = document.documentElement;
+      function sync() {
+        var isLight = root.getAttribute("data-theme") === "light";
+        btn.textContent = isLight ? "☀️" : "🌙";
+      }
+      sync();
+      btn.addEventListener("click", function () {
+        var isLight = root.getAttribute("data-theme") === "light";
+        if (isLight) {
+          root.removeAttribute("data-theme");
+          localStorage.setItem("stockai-theme", "dark");
+        } else {
+          root.setAttribute("data-theme", "light");
+          localStorage.setItem("stockai-theme", "light");
+        }
+        sync();
+      });
+    });
+  </script>
+</body>
+</html>

@@ -1,0 +1,63 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="card">
+  <h1>{{ t(lang, 'onboarding_title') }}</h1>
+  <form method="POST" action="{{ url_for('onboarding') }}">
+    <label>{{ t(lang, 'name_label') }}</label>
+    <input type="text" name="name" required placeholder="e.g. Aarav">
+
+    <label>{{ t(lang, 'language_label') }}</label>
+    <select name="language">
+      {% for code, native_name in languages %}
+      <option value="{{ code }}" {% if code == 'en' %}selected{% endif %}>{{ native_name }}</option>
+      {% endfor %}
+    </select>
+    <p class="hint">Onboarding fields above stay in English/Hindi by default; report content itself is generated in whichever language you pick, using built-in phrasing for English/Hindi and automatic translation for every other language.</p>
+
+    <label>{{ t(lang, 'risk_label') }}</label>
+    <select name="risk">
+      <option value="low">{{ t(lang, 'risk_low') }}</option>
+      <option value="medium" selected>{{ t(lang, 'risk_med') }}</option>
+      <option value="high">{{ t(lang, 'risk_high') }}</option>
+    </select>
+
+    <label>{{ t(lang, 'style_label') }}</label>
+    <select name="style">
+      <option value="long">{{ t(lang, 'style_long') }}</option>
+      <option value="short">{{ t(lang, 'style_short') }}</option>
+      <option value="dividend">{{ t(lang, 'style_dividend') }}</option>
+    </select>
+
+    <label>{{ t(lang, 'asset_label') }}</label>
+    <select name="asset_type">
+      <option value="stock">{{ t(lang, 'asset_stock') }}</option>
+      <option value="crypto">{{ t(lang, 'asset_crypto') }}</option>
+      <option value="forex">{{ t(lang, 'asset_forex') }}</option>
+    </select>
+
+    <div class="row-2">
+      <div>
+        <label>{{ t(lang, 'investment_amount_label') }}</label>
+        <input type="number" name="investment_amount" min="1" step="any" value="1000" placeholder="1000">
+      </div>
+      <div>
+        <label>{{ t(lang, 'currency_label') }}</label>
+        <select name="currency">
+          {% for c in currencies %}
+          <option value="{{ c }}" {% if c == 'INR' %}selected{% endif %}>{{ c }}</option>
+          {% endfor %}
+        </select>
+      </div>
+    </div>
+
+    <label>{{ t(lang, 'experience_label') }}</label>
+    <select name="years_experience">
+      <option value="beginner">{{ t(lang, 'experience_beginner') }}</option>
+      <option value="intermediate" selected>{{ t(lang, 'experience_intermediate') }}</option>
+      <option value="experienced">{{ t(lang, 'experience_experienced') }}</option>
+    </select>
+
+    <button type="submit" class="btn-primary">{{ t(lang, 'continue_btn') }}</button>
+  </form>
+</div>
+{% endblock %}

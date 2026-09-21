@@ -1,0 +1,68 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="dashboard-grid">
+  <div class="card">
+    <h1>{{ t(lang, 'dashboard_title') }}</h1>
+    <form method="POST" action="{{ url_for('analyze') }}" enctype="multipart/form-data">
+      <label>{{ t(lang, 'symbol_label') }}</label>
+      <input type="text" name="symbol" id="symbol-input" placeholder="TATAMOTORS.NS / AAPL / BTC-USD / EURUSD=X">
+
+      <label>{{ t(lang, 'duration_preset_label') }}</label>
+      <select name="period" id="period-select">
+        <option value="1mo">1 Month</option>
+        <option value="3mo">3 Months</option>
+        <option value="6mo">6 Months</option>
+        <option value="1y" selected>1 Year</option>
+        <option value="2y">2 Years</option>
+        <option value="5y">5 Years</option>
+        <option value="max">Max</option>
+        <option value="__custom__">{{ t(lang, 'duration_custom_label') }}</option>
+      </select>
+
+      <div id="custom-duration-row" class="row-2" style="display:none;">
+        <div>
+          <label>{{ t(lang, 'duration_custom_value') }}</label>
+          <input type="number" name="custom_value" id="custom-value" min="1" placeholder="e.g. 45">
+        </div>
+        <div>
+          <label>{{ t(lang, 'duration_custom_unit') }}</label>
+          <select name="custom_unit" id="custom-unit">
+            <option value="days">{{ t(lang, 'unit_days') }}</option>
+            <option value="weeks">{{ t(lang, 'unit_weeks') }}</option>
+            <option value="months">{{ t(lang, 'unit_months') }}</option>
+            <option value="years">{{ t(lang, 'unit_years') }}</option>
+          </select>
+        </div>
+      </div>
+      <input type="hidden" name="period_mode" id="period-mode" value="preset">
+
+      <label>{{ t(lang, 'upload_any_label') }}</label>
+      <input type="file" name="data_file" accept=".csv,.pdf,.doc,.docx">
+
+      <label>{{ t(lang, 'upload_img_label') }}</label>
+      <input type="file" name="img_file" id="img-file-input" accept="image/*">
+
+      <label>Or paste a screenshot directly (click the box, then Ctrl+V / Cmd+V)</label>
+      <div class="paste-zone" id="paste-zone" tabindex="0">📋 Click here, then paste (Ctrl+V) a copied chart screenshot</div>
+      <img class="paste-preview" id="paste-preview" alt="Pasted chart preview">
+
+      <button type="submit" class="btn-primary">{{ t(lang, 'analyze_btn') }}</button>
+    </form>
+    <p class="hint">Tip: NSE stocks need a ".NS" suffix (e.g. TATAMOTORS.NS), crypto looks like BTC-USD, forex like EURUSD=X. No API key needed — live data is fetched automatically.</p>
+  </div>
+
+  <div class="card">
+    <h2>{{ t(lang, 'search_section_title') }}</h2>
+    <p class="hint">{{ t(lang, 'search_helper') }}</p>
+    <input type="text" id="site-search-input" placeholder="{{ t(lang, 'search_placeholder') }}">
+    <div class="site-buttons">
+      {% for site in search_sites %}
+      <button type="button" class="btn-secondary site-btn" data-template="{{ site.search_url }}">{{ site.name }}</button>
+      {% endfor %}
+    </div>
+    <p class="hint" id="site-context"></p>
+  </div>
+</div>
+
+<script src="{{ url_for('static', filename='js/main.js') }}"></script>
+{% endblock %}

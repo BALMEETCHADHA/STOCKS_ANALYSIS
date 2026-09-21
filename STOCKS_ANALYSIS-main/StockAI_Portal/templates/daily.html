@@ -1,0 +1,30 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="card">
+  <h1>{{ t(lang, 'daily_scenario') }}</h1>
+  {% if snapshot %}
+  <div class="grid">
+    {% for name, d in snapshot.items() %}
+    <a class="tile {{ 'up' if d.change_pct >= 0 else 'down' }}" href="{{ google_finance_search_url(name) }}" target="_blank" rel="noopener">
+      <h3>{{ name }}</h3>
+      <p class="price">{{ d.price }}</p>
+      <p class="change">{{ '▲' if d.change_pct >= 0 else '▼' }} {{ d.change_pct }}%</p>
+    </a>
+    {% endfor %}
+  </div>
+  {% else %}
+  <p>Live market data unavailable right now (needs internet access). Try again shortly.</p>
+  {% endif %}
+</div>
+
+<div class="card" style="margin-top:1.5rem;">
+  <h2>{{ t(lang, 'daily_visit_heading') }}</h2>
+  <p class="hint">{{ t(lang, 'daily_visit_text') }}</p>
+  <ul class="link-list">
+    {% for site in search_sites %}
+    <li><a href="{{ site.search_url.replace('%s','') }}" target="_blank" rel="noopener">{{ site.name }}</a> — {{ site.for }}</li>
+    {% endfor %}
+  </ul>
+  <p class="flash" style="margin-top:1rem;">{{ t(lang, 'disclaimer') }}</p>
+</div>
+{% endblock %}
