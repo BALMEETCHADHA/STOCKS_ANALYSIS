@@ -232,9 +232,7 @@ Use the **Search Official Sites** panel on the dashboard if you're unsure of the
 
 ## Results
 
-The model predicts future `Close` prices based on historical data. Below is a sample output visualization:
-
-![Stock Price Prediction](assets/stock_price_prediction.png)
+The model predicts future `Close` prices based on historical data.
 
 - **Blue Line**: Original Prices
 - **Red Line**: Predicted Prices
@@ -249,6 +247,4 @@ This project is for educational and research purposes only. All forecasts, techn
 
 ---
 
-## License
 
-This project is licensed under the MIT License. See the [LICENSE](LICENSE) file for details.
